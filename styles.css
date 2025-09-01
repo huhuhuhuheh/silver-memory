@@ -1,0 +1,29 @@
+        .button-container button, .github-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #61dafb;
+            color: #333;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            margin: 0 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    
+        .github-button {
+            background-color: #24292e;
+            color: white;
+        }
+    
+        .github-button:hover {
+            background-color: #444950;
+        }
+    
+        .github-button img {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
