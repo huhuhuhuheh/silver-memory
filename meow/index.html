@@ -70,7 +70,7 @@
       image.src = imageUrl;
       
       image.onload = () => {
-        const audio = new Audio('/meow.mp3');
+        const audio = new Audio('../meow/meow.mp3');
         const playPromise = audio.play();
 
         if (playPromise !== undefined) {
@@ -117,3 +117,4 @@
 </script>
 </body>
 </html>
+
