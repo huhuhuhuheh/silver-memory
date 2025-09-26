@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>cat</title>
+<style>
+  body {
+    background-color: black;
+    color: white;
+    margin: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: sans-serif;
+  }
+  img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+  }
+</style>
+</head>
+<body>
+<div id="message"></div>
+<script>
+  (async () => {
+    const today = new Date().toLocaleDateString();
+    let visitData = JSON.parse(localStorage.getItem('catVisit')) || {};
+
+    if (visitData.date !== today) {
+      visitData = { date: today, count: 0 };
+    }
+
+    if (visitData.count >= 3) {
+      const messageDiv = document.getElementById('message');
+      const updateCountdown = () => {
+        const now = new Date();
+        let tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 8);
+        if (now.getHours() >= 8) {
+           tomorrow.setDate(tomorrow.getDate());
+        }
+        const diff = tomorrow - now;
+
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        let timeString = '';
+        if (hours > 0) timeString += `${hours} hour${hours > 1 ? 's' : ''} `;
+        if (minutes > 0) timeString += `${minutes} minute${minutes > 1 ? 's' : ''} `;
+        timeString += `${seconds} second${seconds > 1 ? 's' : ''}`;
+
+        messageDiv.textContent = `Wait ${timeString} to see your cat again`;
+      };
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+      return;
+    }
+
+    try {
+      const imageResponse = await fetch('https://api.thecatapi.com/v1/images/search');
+      const imageData = await imageResponse.json();
+      const imageUrl = imageData[0].url;
+
+      const image = document.createElement('img');
+      image.src = imageUrl;
+      image.onload = () => {
+        const audio = new Audio('/meow.mp3');
+        audio.play();
+      };
+      document.body.innerHTML = '';
+      document.body.appendChild(image);
+
+      visitData.count++;
+      localStorage.setItem('catVisit', JSON.stringify(visitData));
+
+      setTimeout(() => {
+        window.close();
+      }, 5000);
+    } catch (error) {
+      console.error('An error occurred:', error);
+      setTimeout(() => {
+        window.close();
+      }, 1000);
+    }
+  })();
+</script>
+</body>
+</html>
