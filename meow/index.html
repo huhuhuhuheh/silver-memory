@@ -66,7 +66,7 @@
       const image = document.createElement('img');
       image.src = imageUrl;
       image.onload = () => {
-        const audio = new Audio('/meow.mp3');
+        const audio = new Audio('../meow/meow.mp3');
         audio.play();
       };
       document.body.innerHTML = '';
@@ -87,4 +87,5 @@
   })();
 </script>
 </body>
+
 </html>
